@@ -1,6 +1,6 @@
 {
   "name": "@alexcatdad/browser-ocr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Browser-local configurable OCR, image and PDF processing with self-hosted assets",
   "type": "module",
   "license": "UNLICENSED",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexcatdad/romanian-id-prefill.git"
+    "url": "git+https://github.com/alexcatdad/browser-ocr.git"
   },
   "files": [
     "lib/",
@@ -37,8 +37,20 @@
     "pdfjs-dist": "6.3.289"
   },
   "scripts": {
-    "build": "node ../../scripts/prepare-assets.mjs && vite build --config vite.config.ts && tsc -p tsconfig.lib.json && node ../../scripts/finish-library.mjs ocr",
-    "test": "vitest run --root ../.. --config vite.config.ts packages/ocr/src",
+    "assets": "node scripts/prepare-assets.mjs",
+    "build": "npm run assets && vite build && tsc -p tsconfig.lib.json && node scripts/finish-library.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json",
+    "test:package": "npm run build && node scripts/test-package.mjs",
+    "verify": "npm test && npm run typecheck && npm run test:package",
+    "prepare": "npm run build",
     "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.3",
+    "typescript": "7.0.2",
+    "vite": "8.3.1",
+    "vitest": "5.0.2"
   }
 }

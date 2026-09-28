@@ -53,6 +53,30 @@ describe('generic OCR session', () => {
     finish({ data: { text: 'hello', confidence: 80, blocks: null } });
     await expect(active).resolves.toMatchObject({ text: 'hello' }); await reader.dispose();
   });
+  it('allows the engine image-load microtask to dispatch before immediate cancellation terminates it', async () => {
+    vi.stubGlobal('location', { origin: 'https://example.test' });
+    let terminated = false;
+    const dispatch = vi.fn();
+    const worker = {
+      setParameters: vi.fn(async () => {}),
+      terminate: vi.fn(async () => { terminated = true; }),
+      recognize: vi.fn(async () => {
+        // Match pinned Tesseract's await loadImage(dataUrl) before postMessage.
+        await Promise.resolve();
+        expect(terminated).toBe(false);
+        dispatch();
+        return new Promise(() => {});
+      }),
+    };
+    mock.createWorker.mockResolvedValue(worker);
+    const reader = new LocalOcrReader(); await reader.prepare();
+    const active = reader.read(canvas());
+    const rejected = expect(active).rejects.toThrow('cancelled');
+    await reader.cancel(); await rejected;
+    expect(dispatch).toHaveBeenCalledOnce();
+    expect(terminated).toBe(true);
+    expect(reader.ready).toBe(false);
+  });
   it('cancels a pending recognition without waiting for the worker response', async () => {
     vi.stubGlobal('location', { origin: 'https://example.test' });
     const worker = { setParameters: vi.fn(async () => {}), terminate: vi.fn(async () => {}), recognize: vi.fn(() => new Promise(() => {})) };

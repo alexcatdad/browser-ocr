@@ -1,0 +1,8 @@
+node_modules/
+lib/
+runtime-assets/
+*.tgz
+*.tsbuildinfo
+test-results/
+playwright-report/
+.DS_Store

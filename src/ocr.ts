@@ -115,6 +115,10 @@ export class LocalOcrReader {
     this.generation++; this.cancelRead?.(); this.cancelRead = null;
     const worker = this.worker; this.worker = null;
     const pending = this.pending; this.pending = null;
+    // Tesseract 7 synchronously decodes our PNG data URL, then queues its
+    // recognize postMessage after await loadImage(). Let that queued dispatch
+    // finish before terminate nulls the worker. We never await OCR completion.
+    await Promise.resolve();
     await worker?.terminate().catch(() => {});
     await pending?.catch(() => {});
   }

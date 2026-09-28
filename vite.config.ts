@@ -11,8 +11,8 @@ export default defineConfig({
       formats: ['es'],
       fileName: (_format, entry) => `${entry}.js`,
     },
-    rollupOptions: {
-      external: (id) => /^(?:@alexcatdad\/browser-ocr(?:\/|$)|react(?:\/|$)|react-dom(?:\/|$)|mrz(?:\/|$)|tesseract\.js(?:\/|$)|pdfjs-dist(?:\/|$))/.test(id),
+    rolldownOptions: {
+      external: (id) => /^(?:tesseract\.js(?:\/|$)|pdfjs-dist(?:\/|$))/.test(id),
     },
   },
 });

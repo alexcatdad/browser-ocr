@@ -1,9 +1,9 @@
 # @alexcatdad/browser-ocr
 
-Browser-local OCR, image and PDF primitives, independent of Romanian identity-card rules and React. Version 0.1.0 is available as a local archive; it is not published on npm.
+Browser-local OCR, image and PDF primitives, independent of Romanian identity-card rules and React. Version 0.1.1 is available as a local archive; it is not published on npm.
 
 ```sh
-npm install /absolute/path/to/alexcatdad-browser-ocr-0.1.0.tgz
+npm install /absolute/path/to/alexcatdad-browser-ocr-0.1.1.tgz
 npx browser-ocr-assets --to public/reader-assets
 ```
 
@@ -33,6 +33,8 @@ Exports also include `LocalPdfReader`, `decodeImage`, `prepareTextCanvas`, `clea
 
 The package makes no document-data network calls and does not persist input/output. Public software assets load during preparation. Host scripts, telemetry, callbacks and persistence remain the consuming application's responsibility. Cleanup is not forensic memory erasure.
 
-Develop from the repository root with `npm run build:ocr` and `npm run test:ocr`. The independently versioned `@alexcatdad/roid` package depends on this one; OCR has no ROID dependency. Both live in the same repository.
+Develop this repository independently with `npm ci`, `npm test` and `npm run build`; run `npm run verify` for unit, types and packed browser-consumer verification. See [RUNBOOK.md](RUNBOOK.md) for setup, asset maintenance and distribution. `prepare` builds Git installations, so an application can pin `git+https://github.com/alexcatdad/browser-ocr.git#<full-commit-sha>`.
+
+The independently versioned `@alexcatdad/roid` package in [romanian-id-prefill](https://github.com/alexcatdad/romanian-id-prefill) depends on this one. OCR has no ROID or React dependency. OCR source history was preserved when extracting the former `packages/ocr` subtree.
 
 [Full integration guide](https://github.com/alexcatdad/romanian-id-prefill/blob/main/docs/LIBRARY.md). License: `UNLICENSED`; include packaged third-party notices and asset licenses. No registry publication or public reuse license is implied.
